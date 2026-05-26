@@ -18,6 +18,14 @@ private 值為 0 代表公開可讀。以上的語句即代表在 blog table 中
 
 ### In-Band SQLi
 
+最容易被檢測和利用的 SQLi 類型。In-Band 指的是用同一個通訊管道 (同一個 HTTP 請求與回應) 去利用漏洞，發起攻擊並獲得結果，例如：在一個網頁上發現 SQL 注入漏洞，然後能夠從資料庫提取資料到同一網頁上。
+
+> 也就是攻擊者在網頁的輸入框或 URL 注入惡意指令 (發送請求)，資料庫找到的機密資料會直接顯示在同一個網頁的回傳畫面上 (接收回應)。
+
+##### Error-Based SQL Injection
+
+##### Union-Based SQL Injection
+
 ---
 
 ### Blind SQLi
