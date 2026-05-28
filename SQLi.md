@@ -24,7 +24,43 @@ private 值為 0 代表公開可讀。以上的語句即代表在 blog table 中
 
 ##### Error-Based SQL Injection
 
+因為資料庫的錯誤訊息會直接印在瀏覽器螢幕上，所以它是獲取關於資料庫結構的資訊最有效的方式。這種 SQLi 常被用於枚舉整個資料庫。
+
 ##### Union-Based SQL Injection
+
+這種注入利用 SQL 中的 `UNION` 運算子搭配 `SELECT` 的語句，來回傳額外的結果到網頁上。這是透過 SQLi 漏洞來提取出大量資料最常見的方法。
+
+##### THM 中的小實作練習
+
+![alt text](image.png)
+透過更改 ID 編號可以看不同文章。
+
+Error-Based 的關鍵在於透過嘗試特定字元來破壞 SQL 查詢語句，直到產生錯誤訊息。最常見的字元有單引號與雙引號。
+![alt text](image-1.png)
+可以看到在 `id=1` 後面加上一個單引號後，回傳了語法錯誤訊息，這同時代表該網頁存在 SQL 注入漏洞。
+
+嘗試使用 `UNION`：
+![alt text](image-2.png)
+錯誤訊息指出：`UNION SELECT` 語句與原始 `SELECT` 語句欄位數量不匹配，因此傳回錯誤。
+
+新增欄位直到錯誤訊息消失：
+![alt text](image-3.png)
+
+現在出現了文章，但我們需要的是顯示出資料數據。會顯示文章是因為它從該網站程式碼的某處回傳第一個結果並顯示出來。要使得第一個查詢不回傳任何結果，我們可以將 ID 編號改為 0：
+![alt text](image-4.png)
+如此，這個回傳的結果就等同於只有 `UNION SELECT` 查詢的結果。接下來可以開始使用這些回傳的值來獲取有用的資訊。
+
+獲取能夠存取的資料庫名稱：
+![alt text](image-5.png)
+
+獲取資料庫 `sqli_one` 中所有表的列表：
+![alt text](image-6.png)
+> `group_concat()` 函數用來將多個回傳的 row 當中指定的欄位 column (以此例而言為 `table_name`) 合併成一個以逗號 (`,`) 分隔的字串。
+
+> 所有使用者皆可存取 `information_scheme` 資料庫，而它包含有關使用者可存取的所有資料庫、所有表的資訊。
+
+我們要找到 Martin 的密碼，因此我們要針對 `staff_users` 這個表。獲取表 `staff_users` 的結構：
+
 
 ---
 
