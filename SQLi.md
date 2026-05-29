@@ -57,10 +57,18 @@ Error-Based 的關鍵在於透過嘗試特定字元來破壞 SQL 查詢語句，
 ![alt text](image-6.png)
 > `group_concat()` 函數用來將多個回傳的 row 當中指定的欄位 column (以此例而言為 `table_name`) 合併成一個以逗號 (`,`) 分隔的字串。
 
-> 所有使用者皆可存取 `information_scheme` 資料庫，而它包含有關使用者可存取的所有資料庫、所有表的資訊。
+> 所有使用者皆可存取 `information_schema` 資料庫，而它包含有關使用者可存取的所有資料庫、所有表的資訊。
 
 我們要找到 Martin 的密碼，因此我們要針對 `staff_users` 這個表。獲取表 `staff_users` 的結構：
+![alt text](image-7.png)
+> 要檢索的資訊從 `table_name` 換成了 `column_name`，要查詢的資料庫 `information_schema` 的 `table` 換成 `column`。
 
+使用 `username` 與 `password` 這兩欄位來做查詢：
+![alt text](image-8.png)
+> 用冒號將帳號與密碼區分，提高可讀性。
+
+除此之外，還可以添加 HTML 的 `<br>` 標籤，將原先的逗號分隔改為換行分隔，再度提高可讀性：
+![alt text](image-9.png)
 
 ---
 
