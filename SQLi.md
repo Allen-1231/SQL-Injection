@@ -107,6 +107,53 @@ Authentication Bypass 身份驗證繞過：
 
 *THM 中的小實作練習：*
 
+![alt text](image-13.png)
+看到該瀏覽器正文包含 `{"taken":true}`，此 API 端點模擬了許多註冊表單中常見的功能，即檢查使用者帳號是否已註冊，並提示使用者使用其他的帳號名稱。
+
+而 taken 的值為 true，可以假設 `admin` 這個使用者帳號已被註冊。
+![alt text](image-14.png)
+透過輸入 `admin123` 得到 false 來看，確實 `admin` 是以註冊的使用者帳號名稱。
+
+唯一的使用者輸入是 username，因此我們只能利用它來執行 SQL 注入攻擊。
+
+首先一樣要先知道使用者表格的欄位數量：
+![alt text](image-15.png)
+
+直到選取 3 欄，沒有錯誤訊息了，可知共有 3 個欄位：
+![alt text](image-16.png)
+
+接著就能開始枚舉資料庫了。透過內建的 `database()` 函數加上使用 `LIKE` 運算子來嘗試找到回傳 true 的結果：
+![alt text](image-17.png)
+
+> SQL 中的 LIKE 運算子有幾個萬用字元可用來匹配模式：
+> - `%`: 代表 0 個以上的字元，也就是全部。
+> - `_`: 代表單一字元，用來匹配剛好一個字元。
+
+資料庫名稱以 `s` 為開頭：
+![alt text](image-18.png)
+
+如此反覆嘗試各個字元，確認查詢回傳的值是 true，再繼續反覆往下一層解：
+![alt text](image-19.png)
+
+![alt text](image-20.png)
+
+這是 THM 邊引導邊做的小練習，因此已透露資料庫名稱為 `sqli_three`，但問題是，真正在盲注時什麼時候知道要停？
+
+--> 每得到一個正確字元就拿掉萬用字元，看是否回傳還是 true。
+
+或是先得知字串長度。透過 `LENGTH(資料庫)` 判定目標長度，再利用 `SUBSTRING(資料庫, 位置, 1)` 依序枚舉 1 到 N 個位置分別的字元是什麼：
+![alt text](image-21.png)
+
+![alt text](image-22.png)
+
+就如這樣 `SUBSTRING(database(), 1, 1) = "s"` 回傳 true，跟答案的 `sqli_three` 一樣，解出第一個字元，接著再繼續重複對其他 9 個字元嘗試，就能解出 `sqli_three`。
+![alt text](image-23.png)
+
+---
+
+再用類似的方法，使用 information_schema 資料庫，嘗試表格名：
+
+
 ---
 
 ##### Time Based
