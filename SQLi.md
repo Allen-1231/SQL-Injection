@@ -152,7 +152,51 @@ Authentication Bypass 身份驗證繞過：
 ---
 
 再用類似的方法，使用 information_schema 資料庫，嘗試表格名：
+![alt text](image-24.png)
 
+![alt text](image-25.png)
+........
+![alt text](image-26.png)
+
+![alt text](image-27.png)
+表名為 users！
+
+---
+
+又再度以同樣的方法來列出 users 表中的欄位名稱：
+![alt text](image-28.png)
+> 有欄位名稱長度為 2
+
+![alt text](image-29.png)
+> 有欄位名稱長度為 8
+
+直到 30 都是 false，目前先猜測只有兩個欄位，並開始分別解這兩個欄位的名稱：
+![alt text](image-30.png)
+...
+![alt text](image-31.png)
+
+解完一個欄位後，加上 `AND column_name!=<該欄位名>` 到 payload 中，避免遇到重複字元的時候會被誤導而解錯。
+...
+![alt text](image-32.png)
+...
+![alt text](image-33.png)
+
+最後共有三個欄位：id、username、password。
+
+---
+
+開始解存在的使用者帳號：
+![alt text](image-34.png)
+![alt text](image-35.png)
+有 admin 的帳號名稱。
+
+接著同樣的方式解密碼：
+![alt text](image-36.png)
+![alt text](image-37.png)
+密碼為 `3845`
+
+獲得憑證後即可登入：
+![alt text](image-38.png)
 
 ---
 
@@ -162,7 +206,27 @@ Authentication Bypass 身份驗證繞過：
 
 *THM 中的小實作練習：*
 
-例如說要得知表的欄位數時，可以使用 `admin123' UNION SELECT SLEEP(5);--`，如果回應時並沒有暫停 5 秒，表示查詢是失敗的，就能持續增加欄位直到停頓 5 秒才回應的，即是欄位數量。
+例如說要得知表的欄位數時，可以使用 `admin123' UNION SELECT SLEEP(5);--`，如果回應時並沒有暫停 5 秒，表示查詢是失敗的，就能持續增加欄位直到停頓 5 秒才回應的，即是欄位數量：
+![alt text](image-39.png)
+![alt text](image-40.png)
+5 秒的延遲證實了存在 2 個欄位。
+
+資料庫名稱有 9 個字元：
+![alt text](image-41.png)
+
+資料庫名稱以 s 開頭：
+![alt text](image-42.png)
+...
+![alt text](image-43.png)
+![alt text](image-44.png)
+...
+資料庫名稱為 `sqli_four`：
+![alt text](image-45.png)
+
+停頓了 15 秒，這表示有三個表的名稱皆為 5 個字元，因此每查詢到一個結果就 5 秒：
+![alt text](image-46.png)
+可以透過 `LIMIT 1` 限制它抓取第一個結果就好：
+![alt text](image-47.png)
 
 ---
 
