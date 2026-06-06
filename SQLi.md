@@ -223,10 +223,48 @@ Authentication Bypass 身份驗證繞過：
 資料庫名稱為 `sqli_four`：
 ![alt text](image-45.png)
 
-停頓了 15 秒，這表示有三個表的名稱皆為 5 個字元，因此每查詢到一個結果就 5 秒：
+表名為 5 個字元：
 ![alt text](image-46.png)
-可以透過 `LIMIT 1` 限制它抓取第一個結果就好：
+
+但長度 19 也停頓 5 秒：
 ![alt text](image-47.png)
+
+再這樣下去沒完沒了，應該先得知共有幾張表：
+![alt text](image-48.png)
+透過子查詢的 Payload 得知確實只有 2 張表，也就是表名長度分別為 5 與 19 的。
+
+---
+
+u
+![alt text](image-49.png)
+s
+![alt text](image-50.png)
+...
+![alt text](image-51.png)
+字串長度 5 的表名為 users。
+
+長度 19 表名以 a 開頭：
+![alt text](image-52.png)
+...
+前 9 個字元：
+![alt text](image-53.png)
+
+全部解完了：
+![alt text](image-54.png)
+此表名為 analytics_referrers。
+
+---
+
+輪到欄位名了，先確認欄位數量，用與剛剛一樣的 **子查詢+COUNT(*)** 的方式：
+
+users 有 3 個欄位：
+![alt text](image-56.png)
+analytics_referrers 有 2 個欄位：
+![alt text](image-55.png)
+
+開始猜欄位名稱：
+
+
 
 ---
 
