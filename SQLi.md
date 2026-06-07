@@ -262,9 +262,28 @@ users 有 3 個欄位：
 analytics_referrers 有 2 個欄位：
 ![alt text](image-55.png)
 
-開始猜欄位名稱：
+開始猜欄位名稱，選擇有可能會有帳號密碼的 users 表開始解 3 個欄位名稱：
+![alt text](image-57.png)
+![alt text](image-58.png)
+分別為 2，8，8 個字元，因為在長度為 8 時，停頓的時間是 10 秒，代表找到了 2 個長度為 8 字元的欄位名稱。
 
+大膽猜測為 id、username 與 password：
 
+...![alt text](image-59.png)
+
+帳號為 5 個字元：
+![alt text](image-61.png)
+密碼為 4 個字元：
+![alt text](image-60.png)
+
+經解後：
+![alt text](image-62.png)
+> 帳號：admin
+> 
+> 密碼：4961
+
+得以登入：
+![alt text](image-63.png)
 
 ---
 
