@@ -2,7 +2,7 @@
 
 ### 目標
 
-以 `administrator` 使用者的身份登入該購物網站。
+該購物網站的登入功能有 SQLi 漏洞，進行 SQLi 攻擊以 `administrator` 使用者的身份登入該購物網站。
 
 ![alt text](image.png)
 
