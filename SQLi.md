@@ -39,14 +39,18 @@ private 值為 0 代表公開可讀。以上的語句即代表在 blog table 中
 *THM 中的小實作練習：*
 
 ![alt text](image.png)
+
 透過更改 ID 編號可以看不同文章。
 
 Error-Based 的關鍵在於透過嘗試特定字元來破壞 SQL 查詢語句，直到產生錯誤訊息。最常見的字元有單引號與雙引號。
+
 ![alt text](image-1.png)
+
 可以看到在 `id=1` 後面加上一個單引號後，回傳了語法錯誤訊息，這同時代表該網頁存在 SQL 注入漏洞。
 
 嘗試使用 `UNION`：
 ![alt text](image-2.png)
+
 錯誤訊息指出：`UNION SELECT` 語句與原始 `SELECT` 語句欄位數量不匹配，因此傳回錯誤。
 
 新增欄位直到錯誤訊息消失：
@@ -54,6 +58,7 @@ Error-Based 的關鍵在於透過嘗試特定字元來破壞 SQL 查詢語句，
 
 現在出現了文章，但我們需要的是顯示出資料數據。會顯示文章是因為它從該網站程式碼的某處回傳第一個結果並顯示出來。要使得第一個查詢不回傳任何結果，我們可以將 ID 編號改為 0：
 ![alt text](image-4.png)
+
 如此，這個回傳的結果就等同於只有 `UNION SELECT` 查詢的結果。接下來可以開始使用這些回傳的值來獲取有用的資訊。
 
 獲取能夠存取的資料庫名稱：
@@ -90,6 +95,7 @@ Authentication Bypass 身份驗證繞過：
 *THM 中的小實作練習：*
 
 ![alt text](image-10.png)
+
 網頁查詢 SQL 指令為 `SELECT * FROM users WHERE username='' AND password='' LIMIT 1;`，
 由於帳號密碼需要使用者輸入，因此現在是空字串。
 
@@ -108,10 +114,12 @@ Authentication Bypass 身份驗證繞過：
 *THM 中的小實作練習：*
 
 ![alt text](image-13.png)
+
 看到該瀏覽器正文包含 `{"taken":true}`，此 API 端點模擬了許多註冊表單中常見的功能，即檢查使用者帳號是否已註冊，並提示使用者使用其他的帳號名稱。
 
 而 taken 的值為 true，可以假設 `admin` 這個使用者帳號已被註冊。
 ![alt text](image-14.png)
+
 透過輸入 `admin123` 得到 false 來看，確實 `admin` 是以註冊的使用者帳號名稱。
 
 唯一的使用者輸入是 username，因此我們只能利用它來執行 SQL 注入攻擊。
@@ -159,6 +167,7 @@ Authentication Bypass 身份驗證繞過：
 ![alt text](image-26.png)
 
 ![alt text](image-27.png)
+
 表名為 users！
 
 ---
@@ -188,11 +197,13 @@ Authentication Bypass 身份驗證繞過：
 開始解存在的使用者帳號：
 ![alt text](image-34.png)
 ![alt text](image-35.png)
+
 有 admin 的帳號名稱。
 
 接著同樣的方式解密碼：
 ![alt text](image-36.png)
 ![alt text](image-37.png)
+
 密碼為 `3845`
 
 獲得憑證後即可登入：
@@ -209,6 +220,7 @@ Authentication Bypass 身份驗證繞過：
 例如說要得知表的欄位數時，可以使用 `admin123' UNION SELECT SLEEP(5);--`，如果回應時並沒有暫停 5 秒，表示查詢是失敗的，就能持續增加欄位直到停頓 5 秒才回應的，即是欄位數量：
 ![alt text](image-39.png)
 ![alt text](image-40.png)
+
 5 秒的延遲證實了存在 2 個欄位。
 
 資料庫名稱有 9 個字元：
@@ -220,6 +232,7 @@ Authentication Bypass 身份驗證繞過：
 ![alt text](image-43.png)
 ![alt text](image-44.png)
 ...
+
 資料庫名稱為 `sqli_four`：
 ![alt text](image-45.png)
 
@@ -231,26 +244,33 @@ Authentication Bypass 身份驗證繞過：
 
 再這樣下去沒完沒了，應該先得知共有幾張表：
 ![alt text](image-48.png)
+
 透過子查詢的 Payload 得知確實只有 2 張表，也就是表名長度分別為 5 與 19 的。
 
 ---
 
 u
+
 ![alt text](image-49.png)
+
 s
+
 ![alt text](image-50.png)
 ...
 ![alt text](image-51.png)
+
 字串長度 5 的表名為 users。
 
 長度 19 表名以 a 開頭：
 ![alt text](image-52.png)
 ...
+
 前 9 個字元：
 ![alt text](image-53.png)
 
 全部解完了：
 ![alt text](image-54.png)
+
 此表名為 analytics_referrers。
 
 ---
@@ -259,12 +279,14 @@ s
 
 users 有 3 個欄位：
 ![alt text](image-56.png)
+
 analytics_referrers 有 2 個欄位：
 ![alt text](image-55.png)
 
 開始猜欄位名稱，選擇有可能會有帳號密碼的 users 表開始解 3 個欄位名稱：
 ![alt text](image-57.png)
 ![alt text](image-58.png)
+
 分別為 2，8，8 個字元，因為在長度為 8 時，停頓的時間是 10 秒，代表找到了 2 個長度為 8 字元的欄位名稱。
 
 大膽猜測為 id、username 與 password：
@@ -272,17 +294,22 @@ analytics_referrers 有 2 個欄位：
 ...![alt text](image-59.png)
 
 帳號為 5 個字元：
+
 ![alt text](image-61.png)
+
 密碼為 4 個字元：
+
 ![alt text](image-60.png)
 
 經解後：
+
 ![alt text](image-62.png)
 > 帳號：admin
 > 
 > 密碼：4961
 
 得以登入：
+
 ![alt text](image-63.png)
 
 ---
