@@ -2,7 +2,7 @@
 
 ### 目標
 
-![alt text](image-8.png)
+![alt text](image-10.png)
 
 該購物網站的產品類別篩選器有 SQLi 漏洞，使用 UNION 攻擊執行注入語句來取得資料庫的種類與版本。
 
@@ -38,8 +38,24 @@
 ' UNION SELECT 'a','b' FROM dual--
 ```
 
-![alt text](image-6.png)
+![alt text](image-9.png)
 
 回傳正常網頁了，可知有兩個欄位。
 
 ---
+
+查找 cheat sheet 中資料庫版本的部分，如下圖所示：
+![alt text](image-11.png)
+
+版本資訊在名為 v$version 或 v$instance 的系統字典表裡。
+
+```sql
+' UNION SELECT 'a',banner FROM v$version--
+```
+
+![alt text](image-12.png)
+
+網頁下滑至最下方：
+![alt text](image-13.png)
+
+可以看到回傳了題目要求要取得的資訊，因此 Payload 為 `' UNION SELECT 'a',banner FROM v$version--`。
