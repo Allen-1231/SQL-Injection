@@ -75,11 +75,12 @@ Error-Based 的關鍵在於透過嘗試特定字元來破壞 SQL 查詢語句，
 > 要檢索的資訊從 `table_name` 換成了 `column_name`，要查詢的資料庫 `information_schema` 的 `table` 換成 `column`。
 
 使用 `username` 與 `password` 這兩欄位來做查詢：
-![alt text](image-8.png)
-> 用冒號將帳號與密碼區分，提高可讀性。
 
-除此之外，還可以添加 HTML 的 `<br>` 標籤，將原先的逗號分隔改為換行分隔，再度提高可讀性：
-![alt text](image-9.png)
+> 用冒號將帳號與密碼區分，提高可讀性。
+![alt text](image-64.png)
+
+> 除此之外，還可以添加 HTML 的 `<br>` 標籤，將原先的逗號分隔改為換行分隔，再度提高可讀性：
+![alt text](image-8.png)
 
 ---
 
